@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Selamat Ulang Tahun!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f3e7e9, #e3eeff);
+    overflow-x: hidden;
+    color: #2c3e50;
+  }
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #container {
+    position: relative;
+    width: 90vw;
+    max-width: 400px;
+    height: 80vh;
+    max-height: 700px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(44, 62, 80, 0.15);
+    border-radius: 30px;
+    background: #fbfbfdcc;
+    display: flex;
+    flex-direction: column;
+  }
+  .layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 20px 40px;
+    box-sizing: border-box;
+    color: #34495e;
+    text-align: center;
+    background: #fbfbfddd;
+    transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+    user-select: none;
+  }
+  .layer img {
+    max-height: 45%;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(44, 62, 80, 0.1);
+    margin-bottom: 18px;
+    pointer-events: none;
+    user-select: none;
+  }
+  .caption {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #34495e;
+    text-shadow: 1px 1px 4px #dcdffe;
+    user-select: text;
+  }
+  .spotify-link {
+    background: #1db954;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 5px 15px rgba(29, 185, 84, 0.8);
+    transition: background 0.3s ease;
+    user-select: none;
+    display: inline-block;
+    margin: 15px 0;
+  }
+  .spotify-link:hover, .spotify-link:focus {
+    background: #179b42;
+  }
+  .controls {
+    position: absolute;
+    bottom: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px;
+    box-sizing: border-box;
+  }
+  button {
+    background: #1db954;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(29, 185, 84, 0.6);
+    user-select: none;
+    transition: background 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+  }
+  button:focus {
+    outline: 3px solid #68d882;
+  }
+  button:hover {
+    background: #179b42;
+  }
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(80%);
+  }
+  .active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+    z-index: 10;
+  }
+  .final-layer a.surprise-link {
+    background: #ffa500;
+    color: #fff;
+    padding: 16px 40px;
+    font-size: 1.25rem;
+    border-radius: 50px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 6px 15px #ff9800cc;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  .final-layer a.surprise-link:hover,
+  .final-layer a.surprise-link:focus {
+    background: #cc7a00;
+  }
+
+  /* Confetti container */
+  #confetti {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    overflow: visible;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+  <main id="container" role="main" aria-live="polite" aria-atomic="true" aria-label="Birthday layers container">
+    <!-- Layers injected here -->
+  </main>
+
+  <div id="confetti"></div>
+
+  <audio id="bg-music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2021/12/16/audio_8560e5d1a3.mp3?filename=birthday-happy-birthday-popular-song-615.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+<script>
+  (function(){
+    const layersData = [
+      {
+        gif: 'https://media.giphy.com/media/GxN4ics7OlvsA/giphy.gif?cid=ecf05e47qy4o3lfjjqdcjzqzr8s9asof96xyffzz3u1sb7eo&ep=v1_gifs_related&rid=giphy.gif&ct=g',
+        caption: 'Happy Level Up!'
+      },
+      {
+        gif: null,
+        caption: '🌼🌺🍀💖🍰 Wishing you all the best on your special day. I hope today is filled with everything you love, and that the year ahead brings more joy, growth, and peace. You deserve a day as special as you are. '
+      },
+      {
+        gif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZG5ycDZxaHR3dXVyMW9ucm92dW5xODVwYnlkYmtzeTB4MGV5Mmx2YSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/vFKqnCdLPNOKc/giphy.gif',
+        caption: 'I hope today reminds you how loved you are—not just by me, but by the world. You’re one of a kind.'
+      },
+      {
+        gif: 'https://media.giphy.com/media/W1hd3uXRIbddu/giphy.gif?cid=ecf05e47qy4o3lfjjqdcjzqzr8s9asof96xyffzz3u1sb7eo&ep=v1_gifs_related&rid=giphy.gif&ct=g',
+        caption: 'Life is not about achievement, it is about you being happy with yourself.'
+      },
+      
+      {
+        gif: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm4ydGI5MDFzeHZ0cnczdjRlc3RiejZqaWk2dndnbWlkbGhhaTdtbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PcEHGN6WvTO2ekGICI/giphy.gif',
+        caption: 'Cheers to another year🥂🥳💗 Enjoy this music as your present :)',
+        spotifyLink: {
+          url: 'https://open.spotify.com/track/7rfvlim74ftATAUcpMO1Vx?si=kxSYxDZDToaFGF5LhcZWNg',
+          label: '🎵'
+        }
+      },
+      {
+        gif: null,
+        caption: 'Dan sekarang, kejutan spesial untukmu ada di sini!',
+        finalLink: {
+          url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          label: 'Buka Kejutan!'
+        }
+      }
+    ];
+
+    const container = document.getElementById('container');
+    let currentLayer = 0;
+
+    function createLayer(data, index) {
+      const layer = document.createElement('section');
+      layer.classList.add('layer');
+      if(index === 0) {
+        layer.classList.add('active');
+      } else {
+        layer.classList.add('hidden');
+      }
+      if(index === layersData.length - 1) {
+        layer.classList.add('final-layer');
+      }
+      layer.setAttribute('aria-label', `Layer ${index + 1} of ${layersData.length}`);
+
+      if(data.gif) {
+        const img = document.createElement('img');
+        img.src = data.gif;
+        img.alt = data.caption;
+        img.loading = 'lazy';
+        img.draggable = false;
+        layer.appendChild(img);
+      }
+
+      const caption = document.createElement('div');
+      caption.className = 'caption';
+      caption.textContent = data.caption;
+      layer.appendChild(caption);
+
+      if(data.spotifyLink) {
+        const spotifyAnchor = document.createElement('a');
+        spotifyAnchor.href = data.spotifyLink.url;
+        spotifyAnchor.textContent = data.spotifyLink.label;
+        spotifyAnchor.target = '_blank';
+        spotifyAnchor.rel = 'noopener noreferrer';
+        spotifyAnchor.className = 'spotify-link';
+        spotifyAnchor.setAttribute('aria-label', 'Open Spotify link');
+        layer.appendChild(spotifyAnchor);
+      }
+
+      const controls = document.createElement('div');
+      controls.className = 'controls';
+
+      // Remove buttons on layer 5 (index 4)
+      if(index !== 4){
+        if(index > 0) {
+          const btnPrev = document.createElement('button');
+          btnPrev.textContent = '← Sebelumnya';
+          btnPrev.setAttribute('aria-label', 'Previous layer');
+          btnPrev.addEventListener('click', () => showLayer(currentLayer - 1));
+          controls.appendChild(btnPrev);
+        } else {
+          const spacer = document.createElement('div');
+          spacer.style.width = '120px';
+          controls.appendChild(spacer);
+        }
+      
+        if(data.finalLink) {
+          const anchor = document.createElement('a');
+          anchor.href = data.finalLink.url;
+          anchor.textContent = data.finalLink.label;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener noreferrer';
+          anchor.className = 'surprise-link';
+          anchor.setAttribute('aria-label', 'Open the surprise link');
+          controls.appendChild(anchor);
+          launchConfetti();
+        } else {
+          const btnNext = document.createElement('button');
+          btnNext.textContent = 'Selanjutnya →';
+          btnNext.setAttribute('aria-label', 'Next layer');
+          btnNext.addEventListener('click', () => showLayer(currentLayer + 1));
+          controls.appendChild(btnNext);
+        }
+      }
+      // if index === 4 (layer 5), do not add any buttons
+
+      layer.appendChild(controls);
+
+      return layer;
+    }
+
+    function showLayer(index) {
+      if(index < 0 || index >= layersData.length) return;
+      const layers = container.querySelectorAll('.layer');
+      layers[currentLayer].classList.remove('active');
+      layers[currentLayer].classList.add('hidden');
+
+      layers[index].classList.remove('hidden');
+      layers[index].classList.add('active');
+
+      currentLayer = index;
+
+      if(index === layersData.length - 1) {
+        launchConfetti();
+      } else {
+        stopConfetti();
+      }
+    }
+
+    layersData.forEach((layerData, idx) => {
+      container.appendChild(createLayer(layerData, idx));
+    });
+
+    const bgMusic = document.getElementById('bg-music');
+    bgMusic.volume = 0.15;
+    bgMusic.play().catch(()=>{/*autoplay may be blocked*/});
+
+    // Confetti effect setup
+    const confettiContainer = document.getElementById('confetti');
+    const COLORS = ['#fce18a', '#ff726d', '#b48def', '#f4306d', '#5fcde4', '#3ac162'];
+    const COUNT = 150;
+    let confettiPieces = [];
+
+    function createConfetti() {
+      for(let i=0; i<COUNT; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'absolute';
+        confetti.style.width = '8px';
+        confetti.style.height = '8px';
+        confetti.style.backgroundColor = COLORS[Math.floor(Math.random()*COLORS.length)];
+        confetti.style.top = '-10px';
+        confetti.style.left = Math.random()*window.innerWidth + 'px';
+        confetti.style.borderRadius = `${Math.random()*100}%`;
+        confetti.style.opacity = Math.random();
+        confetti.style.transform = `rotate(${Math.random()*360}deg)`;
+        confetti.style.willChange = 'transform, top';
+        confettiContainer.appendChild(confetti);
+
+        confettiPieces.push({
+          el: confetti,
+          x: parseFloat(confetti.style.left),
+          y: -10,
+          speed: 2 + Math.random()*3,
+          rotation: Math.random()*360,
+          rotationSpeed: (Math.random()-0.5)*10,
+          opacity: parseFloat(confetti.style.opacity)
+        });
+      }
+    }
+
+    function animateConfetti() {
+      const width = window.innerWidth;
+      confettiPieces.forEach(piece => {
+        piece.y += piece.speed;
+        piece.rotation += piece.rotationSpeed;
+        if(piece.y > window.innerHeight) {
+          piece.x = Math.random()*width;
+          piece.y = -10;
+          piece.opacity = Math.random();
+          piece.el.style.backgroundColor = COLORS[Math.floor(Math.random()*COLORS.length)];
+        }
+        piece.el.style.top = piece.y + 'px';
+        piece.el.style.left = piece.x + 'px';
+        piece.el.style.transform = `rotate(${piece.rotation}deg)`;
+        piece.el.style.opacity = piece.opacity;
+      });
+      confettiAnimationFrame = requestAnimationFrame(animateConfetti);
+    }
+
+    let confettiAnimationFrame = null;
+
+    function launchConfetti() {
+      if(confettiPieces.length === 0) {
+        createConfetti();
+      }
+      if(!confettiAnimationFrame) {
+        confettiAnimationFrame = requestAnimationFrame(animateConfetti);
+      }
+      confettiContainer.style.display = 'block';
+    }
+
+    function stopConfetti() {
+      if(confettiAnimationFrame) {
+        cancelAnimationFrame(confettiAnimationFrame);
+        confettiAnimationFrame = null;
+      }
+      confettiContainer.style.display = 'none';
+    }
+
+    confettiContainer.style.display = 'none';
+
+    // Keyboard accessibility
+    container.addEventListener('keydown', e => {
+      if(['BUTTON','A'].includes(e.target.tagName)) {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.target.click();
+        }
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
+
